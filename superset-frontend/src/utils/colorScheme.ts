@@ -31,6 +31,10 @@ import {
  */
 export const getColorNamespace = (namespace?: string) => namespace || undefined;
 
+export const ensureSharedLabelsColorsArray = (
+  sharedLabelsColors: string[] | Record<string, string> | undefined,
+) => (Array.isArray(sharedLabelsColors) ? sharedLabelsColors : []);
+
 /**
  * Get labels shared across all charts in a dashboard.
  * Merges a fresh instance of shared label colors with a stored one.
@@ -176,7 +180,9 @@ export const applyColors = (
     CategoricalColorNamespace.getNamespace(colorNameSpace);
   const colorScheme = metadata?.color_scheme;
   const fullLabelsColor = metadata?.map_label_colors || {};
-  const sharedLabels = metadata?.shared_label_colors || [];
+  const sharedLabels = ensureSharedLabelsColorsArray(
+    metadata?.shared_label_colors,
+  );
   const customLabelsColor = metadata?.label_colors || {};
   const sharedLabelsColor = getSharedLabelsColorMapEntries(
     fullLabelsColor,
